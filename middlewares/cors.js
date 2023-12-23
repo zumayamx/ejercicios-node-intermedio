@@ -9,7 +9,7 @@ const ACCEPTED_ORIGINS =[
 
 export const corsMiddleware = ({ acceptedOrigins = ACCEPTED_ORIGINS} = {}) => cors({
     origin: (origin, callback) => {
-        if ( ACCEPTED_ORIGINS.includes(origin)  || !origin) {
+        if ( ACCEPTED_ORIGINS.includes(origin)  || !origin ) {
             callback(null, true)
         }
         return callback(new Error('Origin NOT allowed by CORS')) /* Si no es un origen permitido (eliminar)*/

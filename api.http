@@ -25,6 +25,8 @@ Content-Type: application/json
     "rate": 9.2
 }
 
+### Borrar una película por ID
+DELETE http://localhost:3000/movies/dcdd0fad-a94c-4810-8acc-5f108d3b18c3
 ### Actualizar una película (solo una parte de la película)
 
 PATCH http://localhost:3000/movies/dcdd0fad-a94c-4810-8acc-5f108d3b18c3
