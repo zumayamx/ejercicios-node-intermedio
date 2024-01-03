@@ -1,5 +1,7 @@
 import mysql from 'mysql2/promise'
 
+// todo, hacer los ejercicios de tarea
+
 const config = {
     host: 'localhost',
     user: 'root',
@@ -18,14 +20,46 @@ export class MovieModel {
   }
 
   static async getById ({ id }) {
+    const [movies] = await connection.query ('SELECT title, year, director, duration, poster, rate,  BIN_TO_UUID(id) id FROM movie WHERE id = UUID_TO_BIN(?);', [id])
    
+    if (movies.length === 0) return null
+
+    return movies[0]
   }
 
   static async create ({ input }) {
+    const {
+    genre: genreInput,
+    title ,
+    year,
+    duration,
+    director,
+    rate,
+    poster } = input 
+
+    const [uuidResult] = await connection.query('SELECT UUID() uuid;')
+    const [{ uuid }] = uuidResult
+
+    try {
+    await connection.query (`INSERT INTO movie (id, title, year, director, duration, poster, rate) 
+    VALUES (UUID_TO_BIN("${uuid}"), ?, ?, ?, ?, ?, ?);`, [title, year, director, duration, poster, rate]
+    ) /* Inyección de mysql */
+  } catch (error) {
+      /* No mostrar eror a usuario */
+      throw new Error ('Error al crear la película')
+      /* Enviar la traza a un servicio interno */
+    }
+    
+    const [movies] = await connection.query (`SELECT title, year, director, duration, poster, rate,  BIN_TO_UUID(id) id 
+    FROM movie WHERE id = UUID_TO_BIN(?);`, [uuid]
+    )
+
+    return movies[0]
 
   }
 
   static async delete ({ id }) {
+  
    
   }
 
